@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<style type="text/css">
+.ansi2html-content { display: inline; white-space: pre-wrap; word-wrap: break-word; }
+.body_foreground { color: #AAAAAA; }
+.body_background { background-color: #000000; }
+.inv_foreground { color: #000000; }
+.inv_background { background-color: #AAAAAA; }
+.ansi1 { font-weight: bold; }
+.ansi32 { color: #00aa00; }
+.ansi33 { color: #aa5500; }
+.ansi36 { color: #00aaaa; }
+</style>
+</head>
+<body class="body_foreground body_background" style="font-size: normal;" >
+<pre class="ansi2html-content">
+<span class="ansi1 ansi32">[rak-search] ....... </span>
+index updated from http://sparrowhub.io/repo/api/v1/index
+<span class="ansi1 ansi36">[code: bash]</span>
+[1] set -e
+[2] 
+[3] echo "foo" &gt; $cache_root_dir/file.txt
+[4] 
+[5] cd $cache_root_dir
+[6] 
+[7] rak --version
+[8] 
+[9] echo "====="
+[10] cat file.txt
+[11] echo "====="
+[12] 
+[13] echo "&lt;&lt;&lt;"
+[14] rak foo --/highlight --human
+[15] echo "&gt;&gt;&gt;"
+[16] 
+[17] 
+<span class="ansi1 ansi36">[stdout]</span>
+rak - provided by App::Rak 0.0.28, running Raku 6.d with Rakudo 2022.04.
+=====
+foo
+=====
+&lt;&lt;&lt;
+file.txt
+1:foo
+&gt;&gt;&gt;
+<span class="ansi1 ansi36">[verification]</span>
+stdout match (s) &lt;&lt;&lt;&lt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;file.txt&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^ \s* '1:foo' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;&gt;&gt;&gt;&gt; <span class="ansi36">True</span>
+<span class="ansi1 ansi32">[rak-search-before-after] ....... </span>
+index updated from http://sparrowhub.io/repo/api/v1/index
+<span class="ansi1 ansi36">[code: bash]</span>
+[1] set -e
+[2] 
+[3] lb=$(config 'lines-before')
+[4] la=$(config 'lines-after')
+[5] 
+[6] touch  $cache_root_dir/file.txt
+[7] 
+[8] for (( i=1 ; i&lt;=$lb ; i++ )); 
+[9] do
+[10] echo "line_before"$i &gt;&gt; $cache_root_dir/file.txt
+[11] done
+[12] 
+[13] echo "foo" &gt;&gt; $cache_root_dir/file.txt
+[14] 
+[15] for (( i=1 ; i&lt;=$la ; i++ )); 
+[16] do
+[17] echo "line_after"$i &gt;&gt; $cache_root_dir/file.txt
+[18] done
+[19] 
+[20] cd $cache_root_dir
+[21] 
+[22] echo "====="
+[23] cat file.txt
+[24] echo "====="
+[25] 
+[26] 
+[27] echo "&lt;&lt;&lt;"
+[28] rak foo --before-context=$lb --after-context=$la --/highlight --human 2&gt;&amp;1
+[29] echo "&gt;&gt;&gt;"
+[30] 
+[31] 
+<span class="ansi1 ansi36">[stdout]</span>
+=====
+line_before1
+line_before2
+line_before3
+foo
+line_after1
+line_after2
+line_after3
+=====
+&lt;&lt;&lt;
+file.txt
+1-line_before1
+2-line_before2
+3-line_before3
+4:foo
+5-line_after1
+6-line_after2
+7-line_after3
+&gt;&gt;&gt;
+<span class="ansi1 ansi36">[verification]</span>
+stdout match (s) &lt;&lt;&lt;&lt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;file.txt&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '1-line_before1' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '2-line_before2' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '3-line_before3' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s*'4:foo' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '5-line_after1' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '6-line_after2' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^\s* '7-line_after3' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;&gt;&gt;&gt;&gt; <span class="ansi36">True</span>
+<span class="ansi1 ansi32">[rak-search-dir] ....... </span>
+index updated from http://sparrowhub.io/repo/api/v1/index
+<span class="ansi1 ansi36">[code: bash]</span>
+[1] set -e
+[2] 
+[3] cd $cache_root_dir
+[4] 
+[5] mkdir bar
+[6] 
+[7] echo "foo" &gt; bar/file.txt
+[8] 
+[9] echo "====="
+[10] cat  bar/file.txt
+[11] echo "====="
+[12] 
+[13] echo "&lt;&lt;&lt;"
+[14] rak foo bar --/highlight --human 2&gt;&amp;1
+[15] echo "&gt;&gt;&gt;"
+[16] 
+[17] echo "---"
+[18] 
+[19] echo "&lt;&lt;&lt;"
+[20] rak foo bar2 --/highlight --human 2&gt;&amp;1
+[21] echo "&gt;&gt;&gt;"
+[22] 
+<span class="ansi1 ansi36">[stdout]</span>
+=====
+foo
+=====
+&lt;&lt;&lt;
+bar/file.txt
+1:foo
+&gt;&gt;&gt;
+---
+&lt;&lt;&lt;
+&gt;&gt;&gt;
+<span class="ansi1 ansi36">[verification]</span>
+<span class="ansi33"># positive case</span>
+stdout match (s) &lt;&lt;&lt;&lt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;bar/file.txt&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^ \s* '1:foo' \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;&gt;&gt;&gt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;---&gt; <span class="ansi36">True</span>
+<span class="ansi33"># negative case</span>
+stdout match (s) &lt;&lt;&lt;&lt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;&gt;&gt;&gt;&gt; <span class="ansi36">True</span>
+<span class="ansi1 ansi32">[rak-search-files-only] ....... </span>
+index updated from http://sparrowhub.io/repo/api/v1/index
+<span class="ansi1 ansi36">[code: bash]</span>
+[1] set -e
+[2] 
+[3] echo "foo" &gt; $cache_root_dir/file.txt
+[4] 
+[5] cd $cache_root_dir
+[6] 
+[7] echo "====="
+[8] cat file.txt
+[9] echo "====="
+[10] 
+[11] echo "&lt;&lt;&lt;"
+[12] rak foo --files-with-matches 2&gt;&amp;1
+[13] echo "&gt;&gt;&gt;"
+[14] 
+[15] 
+<span class="ansi1 ansi36">[stdout]</span>
+=====
+foo
+=====
+&lt;&lt;&lt;
+file.txt
+&gt;&gt;&gt;
+<span class="ansi1 ansi36">[verification]</span>
+stdout match (s) &lt;&lt;&lt;&lt;&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;^^ \s* file.txt \s* $$&gt; <span class="ansi36">True</span>
+stdout match (s) &lt;&gt;&gt;&gt;&gt; <span class="ansi36">True</span>
+=========================================
+<span class="ansi1 ansi32">(=: / [4] tests in 8 sec / (4) tests passed</span>
+
+</pre>
+</body>
+
+</html>
